@@ -135,7 +135,6 @@ int main(void)
 		  press_m18_key(0);
 		  HAL_Delay(m18Time);
 		  press_m18_key(1);
-		  HAL_GPIO_WritePin(activeStatePtr->currentPinInfo.port, activeStatePtr->currentPinInfo.pin, GPIO_PIN_RESET);
 		  activeStatePtr->currentState = STATE_IDLE;
 	  }
   }
