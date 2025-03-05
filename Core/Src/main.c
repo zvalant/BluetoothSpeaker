@@ -35,8 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define USER_BUTTON_PIN GPIO_PIN_13
-#define	USER_BUTTON_PORT GPIOC
+
 
 /* USER CODE END PD */
 
@@ -50,25 +49,40 @@
 /* USER CODE BEGIN PV */
 State activeState = { STATE_IDLE, 0, {M18_POWER_PIN, M18_POWER_PORT}};
 State* activeStatePtr = &activeState;
+uint32_t M18DELAYMS = 200;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
-void press_m18_key(uint16_t toggle){
-	char buff[50];
-	char buff1[50];
-	sprintf(buff,"State: %d \r\n" , activeStatePtr->currentState);
-	HAL_UART_Transmit(&huart3,&buff, strlen(buff),1000 );
-	HAL_GPIO_WritePin(activeStatePtr->currentPinInfo.port, activeStatePtr->currentPinInfo.pin, toggle);
-	char currentPinVal = HAL_GPIO_ReadPin(activeStatePtr->currentPinInfo.port, activeStatePtr->currentPinInfo.pin);
-	sprintf(buff1, "Current Voltage: %d\r\n", currentPinVal);
-	HAL_UART_Transmit(&huart3, &buff1, strlen(buff1),1000);
+void m18TriggerInput(GPIO_TypeDef* port, uint32_t pin){
+	HAL_GPIO_WritePin(port,pin,GPIO_PIN_RESET);
+	HAL_Delay(M18DELAYMS);
+	HAL_GPIO_WritePin(port,pin, GPIO_PIN_SET);
+
 
 
 }
-
+void stateUpdate(){
+	switch(activeStatePtr->currentState){
+		case STATE_PAUSE_PLAY:
+			m18TriggerInput(TRACK_OPTIONS_PORT, PAUSE_PLAY_PIN);
+			break;
+		case STATE_PREV_TRACK:
+			m18TriggerInput(TRACK_OPTIONS_PORT, PREV_TRACK_PIN);
+			break;
+		case STATE_NEXT_TRACK:
+			m18TriggerInput(TRACK_OPTIONS_PORT, NEXT_TRACK_PIN);
+			break;
+		case STATE_POWER_OFF_ON:
+			m18TriggerInput(M18_POWER_PORT, M18_POWER_PIN);
+			break;
+		default:
+			break;
+	}
+	activeStatePtr->currentState = STATE_IDLE;
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -86,8 +100,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	uint8_t m18Time = 200;
-
 
   /* USER CODE END 1 */
 
@@ -130,13 +142,13 @@ int main(void)
     /* USER CODE BEGIN 3 */
 /* if action isnt idle then run m18_function
  */
+	  if (activeStatePtr->currentState!= STATE_IDLE){
 
-	  if (activeStatePtr->currentState != STATE_IDLE){
-		  press_m18_key(0);
-		  HAL_Delay(m18Time);
-		  press_m18_key(1);
-		  activeStatePtr->currentState = STATE_IDLE;
 	  }
+
+	  stateUpdate();
+
+
   }
   /* USER CODE END 3 */
 }

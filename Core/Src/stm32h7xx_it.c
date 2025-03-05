@@ -35,10 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define USER_BUTTON_PIN GPIO_PIN_13
-#define	USER_BUTTON_PORT GPIOC
-#define M18_KEY_PIN GPIO_PIN_7
-#define M18_KEY_PORT GPIOB
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -52,6 +49,18 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
+void updateState(uint32_t duration_ms){
+	if(duration_ms < 500){
+		activeStatePtr->currentState = STATE_PAUSE_PLAY;
+		}else if (duration_ms < 1500){
+			activeStatePtr->currentState = STATE_PREV_TRACK;
+		}else if(duration_ms < 2500){
+			activeStatePtr->currentState = STATE_NEXT_TRACK;
+		}else{
+			activeStatePtr->currentState = STATE_POWER_OFF_ON;
+		}
+
+}
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	uint8_t msg[] = "Interrupt\r\n";
 	HAL_UART_Transmit(&huart3, &msg, strlen(msg),1000);
@@ -65,26 +74,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 		}else{
 			char buff2[80];
 			uint32_t duration_ms = HAL_GetTick()-activeStatePtr->lastPress;
-
-			if(duration_ms< 500){
-				activeStatePtr->currentState = STATE_PAUSE_PLAY;
-				activeStatePtr->currentPinInfo = (PinConfig){PAUSE_PLAY_PIN, TRACK_OPTIONS_PORT};
-
-			}else if (duration_ms < 1500){
-				activeStatePtr->currentState = STATE_PREV_TRACK;
-				activeStatePtr->currentPinInfo = (PinConfig){PREV_TRACK_PIN, TRACK_OPTIONS_PORT};
-
-
-			}else if(duration_ms<2500){
-				activeStatePtr->currentState = STATE_NEXT_TRACK;
-				activeStatePtr->currentPinInfo = (PinConfig){NEXT_TRACK_PIN, TRACK_OPTIONS_PORT};
-
-			}else{
-				activeStatePtr->currentState = STATE_POWER_OFF_ON;
-				activeStatePtr->currentPinInfo = (PinConfig){M18_POWER_PIN, M18_POWER_PORT};
-
-			}
-
+			updateState(duration_ms);
 			sprintf(buff2, "Duration: %d ms State: %d \r\n",duration_ms, activeStatePtr->currentState);
 			HAL_UART_Transmit(&huart3, buff2, strlen(buff2), 1000);
 			}
