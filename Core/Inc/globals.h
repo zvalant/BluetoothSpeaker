@@ -2,6 +2,7 @@
 #define GLOBALS_H
 #include "stm32h7xx_hal.h"
 #include <stdint.h>
+#include <stdbool.h>
 // user input button
 #define USER_BUTTON_PIN GPIO_PIN_13
 #define USER_BUTTON_PORT GPIOC
@@ -20,17 +21,10 @@ typedef enum{
 	STATE_NEXT_TRACK,
 	STATE_POWER_OFF_ON
 } inputState;
-// GPIO INFO FOR STATE CHANGES
-typedef struct {
-	uint16_t pin;
-	GPIO_TypeDef *port;
-
-} PinConfig;
 // MAIN STATE STRUCTURE
 typedef struct {
-	inputState currentState;
+	volatile inputState currentState;
 	uint32_t lastPress;
-	PinConfig currentPinInfo;
 } State;
 
 extern State activeState;

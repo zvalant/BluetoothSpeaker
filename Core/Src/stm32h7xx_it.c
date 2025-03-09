@@ -45,38 +45,57 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+uint16_t PAUSE_PLAY_LIMIT_MS = 500;
+uint16_t PREV_TRACK_LIMIT_MS = 1500;
+uint16_t NEXT_TRACK_LIMIT_MS = 2500;
+uint16_t MAX_UART_DELAY = 1000;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
+/*
+ * updateState: will take duration tracked off user button becoming reset (button release) using overall press time to determine
+ * what the current state should be.
+ */
 void updateState(uint32_t duration_ms){
-	if(duration_ms < 500){
+	if(duration_ms < PAUSE_PLAY_LIMIT_MS){
 		activeStatePtr->currentState = STATE_PAUSE_PLAY;
-		}else if (duration_ms < 1500){
+		}
+	else if (duration_ms < PREV_TRACK_LIMIT_MS){
 			activeStatePtr->currentState = STATE_PREV_TRACK;
-		}else if(duration_ms < 2500){
+		}
+	else if(duration_ms < NEXT_TRACK_LIMIT_MS){
 			activeStatePtr->currentState = STATE_NEXT_TRACK;
-		}else{
+		}
+	else{
 			activeStatePtr->currentState = STATE_POWER_OFF_ON;
 		}
 
 }
+/*
+ * HAL_GPIO_EXTI_Callback: checks to see if the user button triggered interrupt and then will either store
+ * the last time the button was pressed or calculate amount of time pressed and change the state accordingly.
+ */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+	if (activeStatePtr->currentState!= STATE_IDLE){
+		return;
+
+	}
 	uint8_t msg[] = "Interrupt\r\n";
-	HAL_UART_Transmit(&huart3, &msg, strlen(msg),1000);
+	HAL_UART_Transmit(&huart3, &msg, strlen(msg),MAX_UART_DELAY);
 	if (GPIO_Pin == USER_BUTTON_PIN){
 		if (HAL_GPIO_ReadPin(USER_BUTTON_PORT, USER_BUTTON_PIN) == GPIO_PIN_SET){
 			char buff[50];
 			activeStatePtr->lastPress = HAL_GetTick();
 			sprintf(buff, "PressTime: %d ms \r\n", activeStatePtr->lastPress);
-			HAL_UART_Transmit(&huart3, buff, strlen(buff), 1000);
+			HAL_UART_Transmit(&huart3, buff, strlen(buff), MAX_UART_DELAY);
 
 		}else{
 			char buff2[80];
 			uint32_t duration_ms = HAL_GetTick()-activeStatePtr->lastPress;
 			updateState(duration_ms);
 			sprintf(buff2, "Duration: %d ms State: %d \r\n",duration_ms, activeStatePtr->currentState);
-			HAL_UART_Transmit(&huart3, buff2, strlen(buff2), 1000);
+			HAL_UART_Transmit(&huart3, buff2, strlen(buff2), MAX_UART_DELAY);
 			}
 		}
 
@@ -86,8 +105,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+// Calls HAL EXTI handler for PC13
 void EXTI15_10_IRQHandler(void) {
-    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);  // Calls HAL EXTI handler for PC13
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
 }
 /* USER CODE END 0 */
 
