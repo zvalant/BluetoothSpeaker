@@ -26,14 +26,12 @@
 /* USER CODE BEGIN Includes */
 #include "stm32h7xx_hal.h"
 #include "globals.h"
+#include "m18_operations.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-typedef struct {
-	GPIO_TypeDef* port;
-	uint32_t pin;
-} PinConfig;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -51,13 +49,11 @@ typedef struct {
 
 /* USER CODE BEGIN PV */
 State activeState = { STATE_IDLE, 0};
-PinConfig activePin = {TRACK_OPTIONS_PORT,PAUSE_PLAY_PIN};
 State* activeStatePtr = &activeState;
-uint32_t M18_DELAY_MS = 50;
 uint16_t UART_MAX_DELAY_MS = 1000;
-uint32_t m18StartTime = 0;
 inputState previousState = STATE_IDLE;
-bool m18InProcess = false;
+
+const uint8_t SUCCESSFUL_RESPONSE = 0;
 
 
 /* USER CODE END PV */
@@ -66,50 +62,7 @@ bool m18InProcess = false;
 void SystemClock_Config(void);
 static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
-/*InputOutputPinAssignment: Will change target pin to either an input if the m18 task is complete
- * or an output to properly execute m18 task.
- *
- */
-void InputOutputPinAssignment(void){
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	GPIO_InitStruct.Pin = activePin.pin;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	if (m18InProcess){
-		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 
-	}else{
-		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
-	}
-	HAL_GPIO_Init(activePin.port, &GPIO_InitStruct);
-
-
-}/*m18TaskTrigger: Changes the GPIO pin to an output then set pin to low to start the m18 function call process
-and track the time of the trigger to be used to bring the pin high after a delay.
-*
-*/
-void m18TaskTrigger(void){
-	InputOutputPinAssignment();
-	HAL_GPIO_WritePin(activePin.port,activePin.pin,GPIO_PIN_RESET);
-	m18InProcess = true;
-	m18StartTime = HAL_GetTick();
-}
-/*m18TaskCompletionCheck: Called in a non idle state and when a m18 call is in process.
- * After required delay the pin is set back to high ending m18 call and finish logic to complete m18 call process.
- *
- */
-void m18TaskCompletionCheck(void){
-	char buff[50];
-
-	if (HAL_GetTick()-m18StartTime>M18_DELAY_MS){
-		char buff2[50];
-		HAL_GPIO_WritePin(activePin.port, activePin.pin,GPIO_PIN_SET);
-		InputOutputPinAssignment();
-		m18InProcess = false;
-	}
-	return;
-
-}
 
 /*
  * stateUpdate: Takes the previous state and determine if the active pin has changed.
@@ -118,39 +71,21 @@ void m18TaskCompletionCheck(void){
  */
 void stateUpdate(inputState previousState){
 	if (previousState!= activeStatePtr->currentState){
-		switch(activeStatePtr->currentState){
-			case STATE_PAUSE_PLAY:
-				activePin.port = TRACK_OPTIONS_PORT;
-				activePin.pin = PAUSE_PLAY_PIN;
-				break;
-			case STATE_PREV_TRACK:
-				activePin.port = TRACK_OPTIONS_PORT;
-				activePin.pin = PREV_TRACK_PIN;
-				break;
-			case STATE_NEXT_TRACK:
-				activePin.port = TRACK_OPTIONS_PORT;
-				activePin.pin = NEXT_TRACK_PIN;
-				break;
-			case STATE_POWER_OFF_ON:
-				activePin.port = M18_POWER_PORT;
-				activePin.pin = M18_POWER_PIN;
-				break;
-			default:
-				break;
+		uint8_t callResponse = m18Call(activeStatePtr->currentState);
+		if (callResponse!= SUCCESSFUL_RESPONSE){
+			activeStatePtr->currentState = previousState;
+
+
 		}
 	}
-
-	if (m18InProcess){
-
-		m18TaskCompletionCheck();
-		if(m18InProcess==false){
+	else{
+		uint8_t taskCompleteResponse = m18TaskCompletionCheck();
+		if (taskCompleteResponse==SUCCESSFUL_RESPONSE){
 			activeStatePtr->currentState = STATE_IDLE;
 		}
-	}else{
-		m18TaskTrigger();
 	}
-
 }
+
 
 /* USER CODE END PFP */
 
@@ -217,6 +152,7 @@ int main(void)
 		  stateUpdate(previousState);
 
 	  }
+
 	  previousState = activeStatePtr->currentState;
 
 

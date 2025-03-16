@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (12.3.rel1)
+# Toolchain: GNU Tools for STM32 (13.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := BlueToothSpeaker
+BUILD_ARTIFACT_NAME := BluetoothSpeaker
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-BlueToothSpeaker.elf \
+BluetoothSpeaker.elf \
 
 MAP_FILES += \
-BlueToothSpeaker.map \
+BluetoothSpeaker.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-BlueToothSpeaker.list \
+BluetoothSpeaker.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: BlueToothSpeaker.elf secondary-outputs
+main-build: BluetoothSpeaker.elf secondary-outputs
 
 # Tool invocations
-BlueToothSpeaker.elf BlueToothSpeaker.map: $(OBJS) $(USER_OBJS) C:\Users\zac23\OneDrive\Documents\Embedded-C\My_workspace\host\BlueToothSpeaker\STM32H753ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "BlueToothSpeaker.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\zac23\OneDrive\Documents\Embedded-C\My_workspace\host\BlueToothSpeaker\STM32H753ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BlueToothSpeaker.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+BluetoothSpeaker.elf BluetoothSpeaker.map: $(OBJS) $(USER_OBJS) C:\Users\zacv\STM32CubeIDE\host\BluetoothSpeaker\STM32H753ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "BluetoothSpeaker.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\zacv\STM32CubeIDE\host\BluetoothSpeaker\STM32H753ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BluetoothSpeaker.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-BlueToothSpeaker.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "BlueToothSpeaker.list"
+BluetoothSpeaker.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "BluetoothSpeaker.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) BlueToothSpeaker.elf BlueToothSpeaker.list BlueToothSpeaker.map default.size.stdout
+	-$(RM) BluetoothSpeaker.elf BluetoothSpeaker.list BluetoothSpeaker.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

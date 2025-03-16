@@ -33,7 +33,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h \
  ../Core/Inc/usart.h ../Core/Inc/main.h ../Core/Inc/usb_otg.h \
- ../Core/Inc/gpio.h ../Core/Inc/globals.h
+ ../Core/Inc/gpio.h ../Core/Inc/globals.h ../Core/Inc/m18_operations.h \
+ ../Core/Inc/globals.h
 ../Core/Inc/main.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../Core/Inc/stm32h7xx_hal_conf.h:
@@ -72,4 +73,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/main.h:
 ../Core/Inc/usb_otg.h:
 ../Core/Inc/gpio.h:
+../Core/Inc/globals.h:
+../Core/Inc/m18_operations.h:
 ../Core/Inc/globals.h:

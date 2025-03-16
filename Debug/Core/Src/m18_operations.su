@@ -1,0 +1,4 @@
+../Core/Src/m18_operations.c:37:6:InputOutputPinAssignment	32	static
+../Core/Src/m18_operations.c:55:6:m18TaskTrigger	16	static
+../Core/Src/m18_operations.c:65:9:m18TaskCompletionCheck	8	static
+../Core/Src/m18_operations.c:84:9:m18Call	48	static

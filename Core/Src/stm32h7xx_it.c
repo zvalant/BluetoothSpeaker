@@ -85,10 +85,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	HAL_UART_Transmit(&huart3, &msg, strlen(msg),MAX_UART_DELAY);
 	if (GPIO_Pin == USER_BUTTON_PIN){
 		if (HAL_GPIO_ReadPin(USER_BUTTON_PORT, USER_BUTTON_PIN) == GPIO_PIN_SET){
-			char buff[50];
 			activeStatePtr->lastPress = HAL_GetTick();
-			sprintf(buff, "PressTime: %d ms \r\n", activeStatePtr->lastPress);
-			HAL_UART_Transmit(&huart3, buff, strlen(buff), MAX_UART_DELAY);
 
 		}else{
 			char buff2[80];
