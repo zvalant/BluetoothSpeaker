@@ -51,7 +51,7 @@
 State activeState = { STATE_IDLE, 0};
 State* activeStatePtr = &activeState;
 uint16_t UART_MAX_DELAY_MS = 1000;
-inputState previousState = STATE_IDLE;
+
 
 const uint8_t SUCCESSFUL_RESPONSE = 0;
 
@@ -65,25 +65,18 @@ static void MPU_Config(void);
 
 
 /*
- * stateUpdate: Takes the previous state and determine if the active pin has changed.
- * Then will determine if there is an active m18 call and run required to communicate with
- * m18 receiver.
+ * stateUpdate: When current state is not idle state update will run m18 call
+ * and check if there is a current m18 call that needs to be completed.
  */
-void stateUpdate(inputState previousState){
-	if (previousState!= activeStatePtr->currentState){
-		uint8_t callResponse = m18Call(activeStatePtr->currentState);
-		if (callResponse!= SUCCESSFUL_RESPONSE){
-			activeStatePtr->currentState = previousState;
-
-
-		}
+void stateUpdate(void){
+	uint8_t callResponse = m18Call(activeStatePtr->currentState);
+	if (callResponse!= SUCCESSFUL_RESPONSE){
 	}
-	else{
-		uint8_t taskCompleteResponse = m18TaskCompletionCheck();
-		if (taskCompleteResponse==SUCCESSFUL_RESPONSE){
-			activeStatePtr->currentState = STATE_IDLE;
-		}
+	uint8_t taskCompleteResponse = m18TaskCompletionCheck();
+	if (taskCompleteResponse==SUCCESSFUL_RESPONSE){
+		activeStatePtr->currentState = STATE_IDLE;
 	}
+
 }
 
 
@@ -104,7 +97,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
@@ -141,19 +133,17 @@ int main(void)
   /*
    * Super loop: Runs stateUpdate if in a non idle state and keeps track of previous state.
    */
-  while (1)
-  {
+  while (1){
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 
-	  if (activeStatePtr->currentState!= STATE_IDLE){
-		  stateUpdate(previousState);
+	if (activeStatePtr->currentState!= STATE_IDLE){
+		  stateUpdate();
 
 	  }
 
-	  previousState = activeStatePtr->currentState;
 
 
 

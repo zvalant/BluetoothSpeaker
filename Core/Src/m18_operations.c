@@ -46,6 +46,10 @@ void InputOutputPinAssignment(void){
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
 	}
 	HAL_GPIO_Init(m18StatePtr->activePin.port, &GPIO_InitStruct);
+	if (!m18StatePtr->m18InProcess){
+		HAL_GPIO_WritePin(m18StatePtr->activePin.port, m18StatePtr->activePin.pin, GPIO_PIN_SET);
+	}
+	HAL_Delay(10);
 
 
 }/*m18TaskTrigger: Changes the GPIO pin to an output then set pin to low to start the m18 function call process
@@ -67,7 +71,7 @@ uint8_t m18TaskCompletionCheck(void){
 		return M18_NO_TASK_IN_PROCESS;
 
 	}
-	if (HAL_GetTick()-M18_DELAY_MS){
+	if (HAL_GetTick()>m18StatePtr->m18StartTime+M18_DELAY_MS){
 		HAL_GPIO_WritePin(m18StatePtr->activePin.port, m18StatePtr->activePin.pin,GPIO_PIN_SET);
 		InputOutputPinAssignment();
 		m18StatePtr->m18InProcess = false;
