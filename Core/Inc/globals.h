@@ -1,5 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
+
+//Standard Library
 #include "stm32h7xx_hal.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -21,13 +23,5 @@ typedef enum{
 	STATE_NEXT_TRACK,
 	STATE_POWER_OFF_ON
 } inputState;
-// MAIN STATE STRUCTURE
-typedef struct {
-	volatile inputState currentState;
-	volatile uint32_t lastPress;
-} State;
-
-extern State activeState;
-extern State* activeStatePtr;
 #endif
 

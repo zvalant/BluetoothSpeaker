@@ -17,16 +17,17 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
+#include "stm32h7xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "stm32h7xx_hal.h"
+#include "main.h"
 #include "globals.h"
 #include "m18_operations.h"
+#include "speaker_state.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,8 +49,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-State activeState = { STATE_IDLE, 0};
-State* activeStatePtr = &activeState;
+
 uint16_t UART_MAX_DELAY_MS = 1000;
 
 
@@ -69,12 +69,13 @@ static void MPU_Config(void);
  * and check if there is a current m18 call that needs to be completed.
  */
 void stateUpdate(void){
-	uint8_t callResponse = m18Call(activeStatePtr->currentState);
+	uint8_t currentState = getSpeakerState();
+	uint8_t callResponse = m18Call(currentState);
 	if (callResponse!= SUCCESSFUL_RESPONSE){
 	}
 	uint8_t taskCompleteResponse = m18TaskCompletionCheck();
 	if (taskCompleteResponse==SUCCESSFUL_RESPONSE){
-		activeStatePtr->currentState = STATE_IDLE;
+		updateSpeakerState(STATE_IDLE);
 	}
 
 }
@@ -139,7 +140,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	if (activeStatePtr->currentState!= STATE_IDLE){
+	if (getSpeakerState()!= STATE_IDLE){
 		  stateUpdate();
 
 	  }

@@ -33,7 +33,8 @@ Core/Src/stm32h7xx_it.o: ../Core/Src/stm32h7xx_it.c ../Core/Inc/main.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h \
  ../Core/Inc/stm32h7xx_it.h ../Core/Inc/globals.h ../Core/Inc/usart.h \
- ../Core/Inc/main.h ../Core/Inc/usb_otg.h
+ ../Core/Inc/main.h ../Core/Inc/usb_otg.h ../Core/Inc/speaker_state.h \
+ ../Core/Inc/globals.h
 ../Core/Inc/main.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../Core/Inc/stm32h7xx_hal_conf.h:
@@ -73,3 +74,5 @@ Core/Src/stm32h7xx_it.o: ../Core/Src/stm32h7xx_it.c ../Core/Inc/main.h \
 ../Core/Inc/usart.h:
 ../Core/Inc/main.h:
 ../Core/Inc/usb_otg.h:
+../Core/Inc/speaker_state.h:
+../Core/Inc/globals.h:

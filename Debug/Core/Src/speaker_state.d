@@ -1,5 +1,5 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/usart.h \
- ../Core/Inc/main.h ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
+Core/Src/speaker_state.o: ../Core/Src/speaker_state.c \
+ ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  ../Core/Inc/stm32h7xx_hal_conf.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h \
@@ -32,11 +32,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/usart.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h \
- ../Core/Inc/usb_otg.h ../Core/Inc/gpio.h ../Core/Inc/main.h \
- ../Core/Inc/globals.h ../Core/Inc/m18_operations.h ../Core/Inc/globals.h \
- ../Core/Inc/speaker_state.h
-../Core/Inc/usart.h:
-../Core/Inc/main.h:
+ ../Core/Inc/gpio.h ../Core/Inc/main.h ../Core/Inc/speaker_state.h \
+ ../Core/Inc/globals.h ../Core/Inc/globals.h
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../Core/Inc/stm32h7xx_hal_conf.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h:
@@ -70,10 +67,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/usart.h \
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h:
-../Core/Inc/usb_otg.h:
 ../Core/Inc/gpio.h:
 ../Core/Inc/main.h:
-../Core/Inc/globals.h:
-../Core/Inc/m18_operations.h:
-../Core/Inc/globals.h:
 ../Core/Inc/speaker_state.h:
+../Core/Inc/globals.h:
+../Core/Inc/globals.h:

@@ -1,6 +1,8 @@
 "./Core/Src/gpio.o"
 "./Core/Src/m18_operations.o"
+"./Core/Src/m18_state.o"
 "./Core/Src/main.o"
+"./Core/Src/speaker_state.o"
 "./Core/Src/stm32h7xx_hal_msp.o"
 "./Core/Src/stm32h7xx_it.o"
 "./Core/Src/syscalls.o"

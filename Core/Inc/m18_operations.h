@@ -8,18 +8,10 @@
 #ifndef INC_M18_OPERATIONS_H
 #define INC_M18_OPERATIONS_H
 
+
+//Standard librarys
 #include "stm32h7xx_hal.h"
 #include "globals.h"
-
-typedef struct {
-	GPIO_TypeDef* port;
-	uint32_t pin;
-} PinConfig;
-typedef struct {
-	volatile uint32_t m18StartTime;
-	volatile bool m18InProcess;
-	volatile PinConfig activePin;
-} M18OperationState;
 
 
 

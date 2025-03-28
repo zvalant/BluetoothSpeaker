@@ -1,0 +1,6 @@
+../Core/Src/m18_state.c:26:6:m18SetStartTime	16	static
+../Core/Src/m18_state.c:30:10:m18GetStartTime	4	static
+../Core/Src/m18_state.c:34:6:m18SetInProcess	16	static
+../Core/Src/m18_state.c:38:6:m18IsProcessActive	4	static
+../Core/Src/m18_state.c:43:11:m18GetActivePin	16	static
+../Core/Src/m18_state.c:47:6:m18SetActivePin	48	static

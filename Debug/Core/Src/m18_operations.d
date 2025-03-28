@@ -33,7 +33,7 @@ Core/Src/m18_operations.o: ../Core/Src/m18_operations.c \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usb.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pcd_ex.h \
  ../Core/Inc/usart.h ../Core/Inc/main.h ../Core/Inc/m18_operations.h \
- ../Core/Inc/globals.h ../Core/Inc/globals.h
+ ../Core/Inc/globals.h ../Core/Inc/globals.h ../Core/Inc/m18_state.h
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../Core/Inc/stm32h7xx_hal_conf.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h:
@@ -72,3 +72,4 @@ Core/Src/m18_operations.o: ../Core/Src/m18_operations.c \
 ../Core/Inc/m18_operations.h:
 ../Core/Inc/globals.h:
 ../Core/Inc/globals.h:
+../Core/Inc/m18_state.h:

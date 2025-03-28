@@ -26,6 +26,7 @@
 #include "stm32h7xx_hal.h"
 #include "usart.h"
 #include "usb_otg.h"
+#include "speaker_state.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,16 +60,16 @@ uint16_t MAX_UART_DELAY = 1000;
  */
 void updateState(uint32_t duration_ms){
 	if(duration_ms < PAUSE_PLAY_LIMIT_MS){
-		activeStatePtr->currentState = STATE_PAUSE_PLAY;
+		updateSpeakerState(STATE_PAUSE_PLAY);
 		}
 	else if (duration_ms < PREV_TRACK_LIMIT_MS){
-			activeStatePtr->currentState = STATE_PREV_TRACK;
+		updateSpeakerState(STATE_PREV_TRACK);
 		}
 	else if(duration_ms < NEXT_TRACK_LIMIT_MS){
-			activeStatePtr->currentState = STATE_NEXT_TRACK;
+		updateSpeakerState(STATE_NEXT_TRACK);
 		}
 	else{
-			activeStatePtr->currentState = STATE_POWER_OFF_ON;
+		updateSpeakerState(STATE_POWER_OFF_ON);
 		}
 
 }
@@ -77,7 +78,7 @@ void updateState(uint32_t duration_ms){
  * the last time the button was pressed or calculate amount of time pressed and change the state accordingly.
  */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
-	if (activeStatePtr->currentState!= STATE_IDLE){
+	if (getSpeakerState() != STATE_IDLE){
 		return;
 
 	}
@@ -85,13 +86,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	HAL_UART_Transmit(&huart3, &msg, strlen(msg),MAX_UART_DELAY);
 	if (GPIO_Pin == USER_BUTTON_PIN){
 		if (HAL_GPIO_ReadPin(USER_BUTTON_PORT, USER_BUTTON_PIN) == GPIO_PIN_SET){
-			activeStatePtr->lastPress = HAL_GetTick();
+			updateLastPress();
 
 		}else{
 			char buff2[80];
-			uint32_t duration_ms = HAL_GetTick()-activeStatePtr->lastPress;
+			uint32_t duration_ms = HAL_GetTick()-getLastPress();
 			updateState(duration_ms);
-			sprintf(buff2, "Duration: %d ms State: %d \r\n",duration_ms, activeStatePtr->currentState);
+			sprintf(buff2, "Duration: %d ms State: %d \r\n",duration_ms, getSpeakerState());
 			HAL_UART_Transmit(&huart3, buff2, strlen(buff2), MAX_UART_DELAY);
 			}
 		}
