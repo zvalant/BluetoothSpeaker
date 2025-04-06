@@ -6,12 +6,12 @@
  */
 
 
-//Standard library
+//Standard Header Files
 #include "stdint.h"
 #include "stm32h7xx_hal.h"
 #include "gpio.h"
 #include "stdbool.h"
-//Project specific
+//Project Header Files
 #include "m18_state.h"
 #include "globals.h"
 

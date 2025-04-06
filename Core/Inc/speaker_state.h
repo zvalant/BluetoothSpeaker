@@ -8,11 +8,11 @@
 #ifndef INC_SPEAKER_STATE_H_
 #define INC_SPEAKER_STATE_H_
 
-//Standard library
+//Standard Header Files
 #include "stm32h7xx_hal.h"
 #include "stdint.h"
 
-//Project specific
+//Project Header Files
 #include "globals.h"
 
 //Keeps track of current speaker state

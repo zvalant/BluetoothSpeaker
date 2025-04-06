@@ -18,14 +18,17 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
+//Standard Header Files
+
 #include "main.h"
 #include "stm32h7xx_it.h"
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-#include "globals.h"
 #include "stm32h7xx_hal.h"
 #include "usart.h"
 #include "usb_otg.h"
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+//Project Header Files
+#include "globals.h"
 #include "speaker_state.h"
 /* USER CODE END Includes */
 
@@ -61,16 +64,16 @@ uint16_t MAX_UART_DELAY = 1000;
 void updateState(uint32_t duration_ms){
 	if(duration_ms < PAUSE_PLAY_LIMIT_MS){
 		updateSpeakerState(STATE_PAUSE_PLAY);
-		}
+	}
 	else if (duration_ms < PREV_TRACK_LIMIT_MS){
 		updateSpeakerState(STATE_PREV_TRACK);
-		}
+	}
 	else if(duration_ms < NEXT_TRACK_LIMIT_MS){
 		updateSpeakerState(STATE_NEXT_TRACK);
-		}
+	}
 	else{
 		updateSpeakerState(STATE_POWER_OFF_ON);
-		}
+	}
 
 }
 /*
@@ -94,10 +97,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 			updateState(duration_ms);
 			sprintf(buff2, "Duration: %d ms State: %d \r\n",duration_ms, getSpeakerState());
 			HAL_UART_Transmit(&huart3, buff2, strlen(buff2), MAX_UART_DELAY);
-			}
 		}
-
 	}
+
+}
 
 /* USER CODE END PFP */
 

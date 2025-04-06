@@ -1,0 +1,2 @@
+../Core/Src/user_button.c:22:6:disableUserButton	1
+../Core/Src/user_button.c:30:6:enableUserButton	1

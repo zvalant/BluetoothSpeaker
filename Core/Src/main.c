@@ -17,6 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+//Standard Header Files
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
@@ -24,6 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+//Project Header Files
 #include "main.h"
 #include "globals.h"
 #include "m18_operations.h"
@@ -142,8 +144,7 @@ int main(void)
 
 	if (getSpeakerState()!= STATE_IDLE){
 		  stateUpdate();
-
-	  }
+	}
 
 
 

@@ -1,7 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-//Standard Library
+//Standard Header Files
 #include "stm32h7xx_hal.h"
 #include <stdint.h>
 #include <stdbool.h>

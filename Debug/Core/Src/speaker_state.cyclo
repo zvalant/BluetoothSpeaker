@@ -1,4 +1,4 @@
-../Core/Src/speaker_state.c:21:6:updateSpeakerState	1
-../Core/Src/speaker_state.c:26:9:getSpeakerState	1
-../Core/Src/speaker_state.c:30:6:updateLastPress	1
-../Core/Src/speaker_state.c:34:10:getLastPress	1
+../Core/Src/speaker_state.c:18:6:updateSpeakerState	1
+../Core/Src/speaker_state.c:23:9:getSpeakerState	1
+../Core/Src/speaker_state.c:27:6:updateLastPress	1
+../Core/Src/speaker_state.c:31:10:getLastPress	1

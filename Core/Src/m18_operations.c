@@ -4,15 +4,16 @@
  *  Created on: Mar 13, 2025
  *      Author: ZacV
  */
-//std header files
+//Standard Header Files
 #include "stm32h7xx_hal.h"
 #include "stdbool.h"
 #include "usart.h"
 
-//project header files
+//Project Header Files
 #include "m18_operations.h"
 #include "globals.h"
 #include "m18_state.h"
+#include "user_button.h"
 
 
 
@@ -25,8 +26,6 @@ const uint8_t M18_CALL_SUCCESS = 0;
 const uint8_t M18_TASK_INCOMPLETE = -1;
 const uint8_t M18_TASK_COMPLETE = 0;
 const uint8_t M18_NO_TASK_IN_PROCESS = 0;
-//m18 state & ptr
-
 
 
 
@@ -34,7 +33,7 @@ const uint8_t M18_NO_TASK_IN_PROCESS = 0;
  * or an output to properly execute m18 task.
  *
  */
-void InputOutputPinAssignment(PinConfig currentPin){
+void inputOutputPinAssignment(PinConfig currentPin){
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	bool m18Active = m18IsProcessActive();
 	GPIO_InitStruct.Pin = currentPin.pin;
@@ -53,15 +52,17 @@ void InputOutputPinAssignment(PinConfig currentPin){
 	HAL_Delay(10);
 
 
-}/*m18TaskTrigger: Changes the GPIO pin to an output then set pin to low to start the m18 function call process
+}
+/*m18TaskTrigger: Changes the GPIO pin to an output then set pin to low to start the m18 function call process
 and track the time of the trigger to be used to bring the pin high after a delay.
 *
 */
 void m18TaskTrigger(void){
+	disableUserButton();
 	PinConfig currentPin = m18GetActivePin();
-	InputOutputPinAssignment(currentPin);
-	HAL_GPIO_WritePin(currentPin.port,currentPin.pin,GPIO_PIN_RESET);
+	inputOutputPinAssignment(currentPin);
 	m18SetInProcess(true);
+	HAL_GPIO_WritePin(currentPin.port,currentPin.pin,GPIO_PIN_RESET);
 	m18SetStartTime();
 }
 /*m18TaskCompletionCheck: Called in a non idle state and will debounce if m18 task isnt in process.
@@ -76,8 +77,9 @@ uint8_t m18TaskCompletionCheck(void){
 	if (HAL_GetTick()>m18GetStartTime()+M18_DELAY_MS){
 		PinConfig currentPin = m18GetActivePin();
 		HAL_GPIO_WritePin(currentPin.port, currentPin.pin,GPIO_PIN_SET);
-		InputOutputPinAssignment(currentPin);
+		inputOutputPinAssignment(currentPin);
 		m18SetInProcess(false);
+		enableUserButton();
 
 		return M18_TASK_COMPLETE;
 	}
